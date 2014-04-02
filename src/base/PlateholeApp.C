@@ -3,6 +3,11 @@
 #include "AppFactory.h"
 #include "ModulesApp.h"
 
+// PlateHole include
+#include "Sig11Func.h"
+#include "Sig12Func.h"
+#include "Sig22Func.h"
+
 template<>
 InputParameters validParams<PlateholeApp>()
 {
@@ -37,6 +42,9 @@ PlateholeApp::registerApps()
 void
 PlateholeApp::registerObjects(Factory & factory)
 {
+  registerFunction(Sig11Func); // register ZZY function
+  registerFunction(Sig12Func); // register ZZY function
+  registerFunction(Sig22Func); // register ZZY function
 }
 
 void
