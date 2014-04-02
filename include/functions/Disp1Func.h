@@ -12,36 +12,28 @@
 /*            See COPYRIGHT for full restrictions               */
 /****************************************************************/
 
-#include "Sig22Func.h"
-#include <math.h>
+#ifndef DISP1FUNC_H
+#define DISP1FUNC_H
+
+#include "Function.h"
+
+class Disp1Func;
 
 template<>
-InputParameters validParams<Sig22Func>()
+InputParameters validParams<Disp1Func>();
+
+class Disp1Func : public Function
 {
-  InputParameters params = validParams<Function>();
-  params.addParam<Real>("sig0", 1.0, "The value of tensile traction in x");
-  params.addParam<Real>("a", 1.0, "The radius of the hole");
-  return params;
-}
+public:
+  Disp1Func(const std::string & name, InputParameters parameters);
 
-Sig22Func::Sig22Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
-    _sig0(getParam<Real>("sig0")),
-    _a(getParam<Real>("a"))
-{}
+  virtual Real value(Real t, const Point & p);
 
-Real
-Sig22Func::value(Real t, const Point & p)
-{
-  Real r = 0.0;
-  Real theta = 0.0;
-  Real val = 0.0;
-  Real tfac = (t < 1.0) ? 0.0 : (t-1.0);
+protected:
+  Real _sig0;
+  Real _a; // hole radius
+  Real _E; // young's modulus
+  Real _nu; // possion ratio
+};
 
-  r = sqrt(p(0)*p(0) + p(1)*p(1));
-  theta = atan2(p(1),p(0));
-  if (r != 0.0)
-    val = tfac*_sig0*(-(_a/r)*(_a/r)*(0.5*cos(2.0*theta)-cos(4.0*theta)) - 1.5*pow((_a/r),4)*cos(4.0*theta));
-
-  return val;
-}
+#endif //DISP1FUNC_H

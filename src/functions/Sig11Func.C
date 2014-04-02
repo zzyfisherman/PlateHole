@@ -31,12 +31,17 @@ Sig11Func::Sig11Func(const std::string & name, InputParameters parameters) :
 {}
 
 Real
-Sig11Func::value(Real /*t*/, const Point & p)
+Sig11Func::value(Real t, const Point & p)
 {
-  double r = 1.0;
-  double theta = 1.0;
-//  return _alpha*_alpha*libMesh::pi*libMesh::pi*std::sin(_alpha*libMesh::pi*p(0));  // p(0) == x
+  Real r = 0.0;
+  Real theta = 0.0;
+  Real val = 0.0;
+  Real tfac = (t < 1.0) ? 0.0 : (t-1.0);
+
   r = sqrt(p(0)*p(0) + p(1)*p(1));
   theta = atan2(p(1),p(0));
-  return _sig0*(1.0 - 1.5*(_a/r)*(_a/r)*(cos(2.0*theta)+cos(4.0*theta)) + 1.5*pow((_a/r),4)*cos(4.0*theta));
+  if (r != 0.0)
+    val = tfac*_sig0*(1.0 - (_a/r)*(_a/r)*(1.5*cos(2.0*theta)+cos(4.0*theta)) + 1.5*pow((_a/r),4)*cos(4.0*theta));
+
+  return val;
 }
