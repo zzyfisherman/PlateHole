@@ -5,9 +5,6 @@
 
 // PlateHole include
 #include "Sig11Func.h"
-#include "Sig12Func.h"
-#include "Sig22Func.h"
-#include "Disp1Func.h"
 #include "Disp2Func.h"
 
 template<>
@@ -45,9 +42,6 @@ void
 PlateholeApp::registerObjects(Factory & factory)
 {
   registerFunction(Sig11Func); // register ZZY function
-  registerFunction(Sig12Func); // register ZZY function
-  registerFunction(Sig22Func); // register ZZY function
-  registerFunction(Disp1Func);
   registerFunction(Disp2Func);
 }
 

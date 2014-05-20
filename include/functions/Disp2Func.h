@@ -30,10 +30,10 @@ public:
   virtual Real value(Real t, const Point & p);
 
 protected:
-  Real _sig0;
-  Real _a; // semi-major axis
-  Real _b; // semi_minor axis
-  Real _E; // young's modulus
+  Real _M;
+  Real _E; // semi-major axis
+  Real _I; // semi_minor axis
+  Real _l; // young's modulus
   Real _nu; // poission ratio
 };
 

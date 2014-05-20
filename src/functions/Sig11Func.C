@@ -14,50 +14,25 @@
 
 #include "Sig11Func.h"
 #include <math.h>
-#include <complex>
-#include "hyperb.h"
 
 template<>
 InputParameters validParams<Sig11Func>()
 {
   InputParameters params = validParams<Function>();
-  params.addParam<Real>("sig0", 1.0, "The value of tensile traction in x");
-  params.addParam<Real>("a", 1.0, "Semi-major axis of the elliptic hole");
-  params.addParam<Real>("b", 1.0, "Semi-minor axis of the elliptic hole");
+  params.addParam<Real>("M", 1.0, "Bending moment");
+  params.addParam<Real>("I", 1.0, "Moment of inertia");
   return params;
 }
 
 Sig11Func::Sig11Func(const std::string & name, InputParameters parameters) :
     Function(name, parameters),
-    _sig0(getParam<Real>("sig0")),
-    _a(getParam<Real>("a")),
-    _b(getParam<Real>("b"))
+    _M(getParam<Real>("M")),
+    _I(getParam<Real>("I"))
 {}
 
 Real
 Sig11Func::value(Real t, const Point & p)
 {
-  Real c = 0.0; // focus
-  Real ksi0 = 0.0;
-  std::complex<double> z(p(1),p(0)); // NOTE: x & y are flipped over here
-  std::complex<double> z_bar = conj(z);
-  std::complex<double> zeta(0.0,0.0);
-  std::complex<double> phip(0.0,0.0); // 1st derivative of phi(z)
-  std::complex<double> phipp(0.0,0.0); // 2nd derivative of phi(z)
-  std::complex<double> chipp(0.0,0.0); // 2nd derivative of chi(z)
-  Real val = 0.0;
   Real tfac = (t < 1.0) ? 0.0 : (t-1.0);
-
-  c = sqrt(_a*_a - _b*_b); // focus
-  ksi0 = acosh(_a/c); // see Timoshenko P 187
-  zeta = cacosh((1.0/c)*z); // curviliear coords of (x,y)
-  phip = (0.25*_sig0)*(-exp(2.0*ksi0) + (1.0+exp(2.0*ksi0))*(1.0/tanh(zeta)));
-  phipp = (-0.25*_sig0/c)*(1+exp(2*ksi0))*(1.0/(sinh(zeta)*sinh(zeta)*sinh(zeta)));
-  chipp = (0.25*_sig0)*(2.0*exp(2.0*ksi0)*cosh(2.0*zeta-2.0*ksi0) 
-        + (cosh(2.0*ksi0)+1.0-exp(2.0*ksi0)*sinh(2.0*zeta-2.0*ksi0))*(1.0/tanh(zeta)))/(sinh(zeta)*sinh(zeta));
-
-  if (real(zeta) != 0.0)
-    val = tfac*(2.0*real(phip) + real(z_bar*phipp+chipp));//sig_y in Timoshenko
-
-  return val;
+  return tfac*(-_M*p(1)/_I);
 }

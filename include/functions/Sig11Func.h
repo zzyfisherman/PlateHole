@@ -30,9 +30,8 @@ public:
   virtual Real value(Real t, const Point & p);
 
 protected:
-  Real _sig0;
-  Real _a; // semi-major axis
-  Real _b; // semi-minor axis
+  Real _M;
+  Real _I;
 };
 
 #endif //SIG11FUNC_H
