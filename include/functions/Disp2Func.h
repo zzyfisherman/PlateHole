@@ -31,7 +31,8 @@ public:
 
 protected:
   Real _sig0;
-  Real _a; // hole radius
+  Real _a; // semi-major axis
+  Real _b; // semi_minor axis
   Real _E; // young's modulus
   Real _nu; // poission ratio
 };

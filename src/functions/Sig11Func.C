@@ -14,34 +14,50 @@
 
 #include "Sig11Func.h"
 #include <math.h>
+#include <complex>
+#include "hyperb.h"
 
 template<>
 InputParameters validParams<Sig11Func>()
 {
   InputParameters params = validParams<Function>();
   params.addParam<Real>("sig0", 1.0, "The value of tensile traction in x");
-  params.addParam<Real>("a", 1.0, "The radius of the hole");
+  params.addParam<Real>("a", 1.0, "Semi-major axis of the elliptic hole");
+  params.addParam<Real>("b", 1.0, "Semi-minor axis of the elliptic hole");
   return params;
 }
 
 Sig11Func::Sig11Func(const std::string & name, InputParameters parameters) :
     Function(name, parameters),
     _sig0(getParam<Real>("sig0")),
-    _a(getParam<Real>("a"))
+    _a(getParam<Real>("a")),
+    _b(getParam<Real>("b"))
 {}
 
 Real
 Sig11Func::value(Real t, const Point & p)
 {
-  Real r = 0.0;
-  Real theta = 0.0;
+  Real c = 0.0; // focus
+  Real ksi0 = 0.0;
+  std::complex<double> z(p(1),p(0)); // NOTE: x & y are flipped over here
+  std::complex<double> z_bar = conj(z);
+  std::complex<double> zeta(0.0,0.0);
+  std::complex<double> phip(0.0,0.0); // 1st derivative of phi(z)
+  std::complex<double> phipp(0.0,0.0); // 2nd derivative of phi(z)
+  std::complex<double> chipp(0.0,0.0); // 2nd derivative of chi(z)
   Real val = 0.0;
   Real tfac = (t < 1.0) ? 0.0 : (t-1.0);
 
-  r = sqrt(p(0)*p(0) + p(1)*p(1));
-  theta = atan2(p(1),p(0));
-  if (r != 0.0)
-    val = tfac*_sig0*(1.0 - (_a/r)*(_a/r)*(1.5*cos(2.0*theta)+cos(4.0*theta)) + 1.5*pow((_a/r),4)*cos(4.0*theta));
+  c = sqrt(_a*_a - _b*_b); // focus
+  ksi0 = acosh(_a/c); // see Timoshenko P 187
+  zeta = cacosh((1.0/c)*z); // curviliear coords of (x,y)
+  phip = (0.25*_sig0)*(-exp(2.0*ksi0) + (1.0+exp(2.0*ksi0))*(1.0/tanh(zeta)));
+  phipp = (-0.25*_sig0/c)*(1+exp(2*ksi0))*(1.0/(sinh(zeta)*sinh(zeta)*sinh(zeta)));
+  chipp = (0.25*_sig0)*(2.0*exp(2.0*ksi0)*cosh(2.0*zeta-2.0*ksi0) 
+        + (cosh(2.0*ksi0)+1.0-exp(2.0*ksi0)*sinh(2.0*zeta-2.0*ksi0))*(1.0/tanh(zeta)))/(sinh(zeta)*sinh(zeta));
+
+  if (real(zeta) != 0.0)
+    val = tfac*(2.0*real(phip) + real(z_bar*phipp+chipp));//sig_y in Timoshenko
 
   return val;
 }
