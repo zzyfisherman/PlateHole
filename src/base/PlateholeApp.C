@@ -35,6 +35,7 @@ PlateholeApp::~PlateholeApp()
 {
 }
 
+extern "C" void PlateholeApp__registerApps() { PlateholeApp::registerApps(); }
 void
 PlateholeApp::registerApps()
 {
