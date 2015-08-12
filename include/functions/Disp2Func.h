@@ -25,7 +25,7 @@ InputParameters validParams<Disp2Func>();
 class Disp2Func : public Function
 {
 public:
-  Disp2Func(const std::string & name, InputParameters parameters);
+  Disp2Func(const InputParameters & parameters);
 
   virtual Real value(Real t, const Point & p);
 

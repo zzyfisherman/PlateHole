@@ -26,8 +26,8 @@ InputParameters validParams<Disp1Func>()
   return params;
 }
 
-Disp1Func::Disp1Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
+Disp1Func::Disp1Func(const InputParameters & parameters) :
+    Function(parameters),
     _sig0(getParam<Real>("sig0")),
     _a(getParam<Real>("a")),
     _E(getParam<Real>("E")),

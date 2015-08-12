@@ -24,8 +24,8 @@ InputParameters validParams<Sig11Func>()
   return params;
 }
 
-Sig11Func::Sig11Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
+Sig11Func::Sig11Func(const InputParameters & parameters) :
+    Function(parameters),
     _sig0(getParam<Real>("sig0")),
     _a(getParam<Real>("a"))
 {}

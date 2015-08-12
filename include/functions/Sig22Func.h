@@ -25,7 +25,7 @@ InputParameters validParams<Sig22Func>();
 class Sig22Func : public Function
 {
 public:
-  Sig22Func(const std::string & name, InputParameters parameters);
+  Sig22Func(const InputParameters & parameters);
 
   virtual Real value(Real t, const Point & p);
 

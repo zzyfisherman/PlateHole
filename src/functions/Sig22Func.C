@@ -24,8 +24,8 @@ InputParameters validParams<Sig22Func>()
   return params;
 }
 
-Sig22Func::Sig22Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
+Sig22Func::Sig22Func(const InputParameters & parameters) :
+    Function(parameters),
     _sig0(getParam<Real>("sig0")),
     _a(getParam<Real>("a"))
 {}

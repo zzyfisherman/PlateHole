@@ -11,7 +11,7 @@ InputParameters validParams<PlateholeApp>();
 class PlateholeApp : public MooseApp
 {
 public:
-  PlateholeApp(const std::string & name, InputParameters parameters);
+  PlateholeApp(InputParameters parameters);
   virtual ~PlateholeApp();
 
   static void registerApps();
