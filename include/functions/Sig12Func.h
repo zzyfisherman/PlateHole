@@ -25,7 +25,7 @@ InputParameters validParams<Sig12Func>();
 class Sig12Func : public Function
 {
 public:
-  Sig12Func(const std::string & name, InputParameters parameters);
+  Sig12Func(const InputParameters & parameters);
 
   virtual Real value(Real t, const Point & p);
 

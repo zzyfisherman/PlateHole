@@ -26,8 +26,8 @@ InputParameters validParams<Disp2Func>()
   return params;
 }
 
-Disp2Func::Disp2Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
+Disp2Func::Disp2Func(const InputParameters & parameters) :
+    Function(parameters),
     _sig0(getParam<Real>("sig0")),
     _a(getParam<Real>("a")),
     _E(getParam<Real>("E")),

@@ -24,8 +24,8 @@ InputParameters validParams<Sig12Func>()
   return params;
 }
 
-Sig12Func::Sig12Func(const std::string & name, InputParameters parameters) :
-    Function(name, parameters),
+Sig12Func::Sig12Func(const InputParameters & parameters) :
+    Function(parameters),
     _sig0(getParam<Real>("sig0")),
     _a(getParam<Real>("a"))
 {}
